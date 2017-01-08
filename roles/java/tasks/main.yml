@@ -1,0 +1,7 @@
+---
+# tasks file for java
+- name: Install Java
+  unarchive: src="{{ java_tar_gz }}" dest=/opt creates=/opt/{{ java_dir }}
+
+- name: Create Java link
+  file: src=/opt/{{ java_dir }} dest=/opt/java state=link

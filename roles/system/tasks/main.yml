@@ -1,0 +1,30 @@
+---
+# tasks file for system
+- name: Setting hostname
+  hostname: name=thalia
+
+- name: Set motd
+  template: src=etc/motd dest=/etc/motd
+
+- name: Set timezone
+  template: src=etc/timezone dest=/etc/timezone
+
+- name: Set locales
+  template: src=etc/locale.gen dest=/etc/locale.gen
+  notify: Generate locales
+
+- name: Set sshd_config
+  template: src=etc/ssh/sshd_config dest=/etc/ssh/sshd_config
+  notify: Restart OpenSSH
+
+- name: Remove default user pi
+  user: name=pi remove=yes state=absent
+
+- name: Remove user pi home
+  file: path=/home/pi state=absent
+
+- name: Add user yannis as administrator
+  user: name=yannis password={{ yannis_passwd }} update_password=always append=yes groups=adm,audio,cdrom,dialout,games,gpio,i2c,input,netdev,plugdev,spi,sudo,users,video
+
+- name: Install yannis key
+  authorized_key: user=yannis state=present key="{{ lookup('file', 'id_rsa.pub') }}"

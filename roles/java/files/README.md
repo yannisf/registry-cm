@@ -1,0 +1,1 @@
+In this location the compressed java distribution file is expected to be found for the target architecture. After copying the file here, update the defaults/main.yml accordingly to capture the file name.

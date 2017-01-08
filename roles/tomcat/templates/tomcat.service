@@ -1,0 +1,17 @@
+[Unit]
+Description=Apache Tomcat
+After=network.target
+
+[Service]
+Type=forking
+User=tomcat
+Group=tomcat
+
+Environment="JAVA_HOME=/opt/java"
+Environment="JAVA_OPTS=-Dfile.encoding=UTF-8 -Djava.awt.headless=true -Xms512m -Xmx512m"
+
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+
+[Install]
+WantedBy=multi-user.target

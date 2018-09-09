@@ -1,0 +1,4 @@
+---
+# defaults file for java
+java_tar_gz: jdk-8u111-linux-arm32-vfp-hflt.tar.gz
+java_dir: jdk1.8.0_111

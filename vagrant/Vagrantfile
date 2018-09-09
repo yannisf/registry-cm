@@ -1,0 +1,39 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/xenial64"
+
+  config.vm.network "forwarded_port", guest: 5432, host: 5432 # Postgress
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
+    vb.cpus = 1
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update && apt-get -y upgrade
+    apt-get install -y postgresql-client
+    curl -fsSL get.docker.com | sh
+    usermod -aG docker vagrant
+    systemctl restart docker
+    docker run --name postgres --restart unless-stopped -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:9.5
+    cp /vagrant/.pgpass ~vagrant
+    chown vagrant:vagrant ~vagrant/.pgpass
+    chmod 0600 ~vagrant/.pgpass
+    cp /vagrant/backup.sh ~vagrant
+    chown vagrant:vagrant ~vagrant/backup.sh
+    chmod u+x ~vagrant/backup.sh
+  SHELL
+
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    sleep 10
+    psql -c "CREATE USER registry PASSWORD 'registry' createdb" --host=localhost --port=5432 --username=postgres
+    psql -c "CREATE DATABASE registry OWNER = registry" --host=localhost --port=5432 --username=postgres
+    pg_restore --host=localhost --port=5432 --username=registry -d registry /vagrant/registry_dump.tar
+    sudo cp /vagrant/crontab /var/spool/cron/crontabs/vagrant
+    sudo chown vagrant:crontab /var/spool/cron/crontabs/vagrant
+  SHELL
+
+end

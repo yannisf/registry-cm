@@ -1,0 +1,25 @@
+---
+- hosts: thalia
+  become: true
+
+  vars:
+    - dbuser: registry
+    - dbpassword: registry
+    - dbschema: registry
+
+  roles:
+    - system
+    - java
+    - tomcat
+    - database
+
+#  pre_tasks:
+#    - name: Update apt-cache and upgrade packages
+#      apt: update_cache=yes upgrade=yes autoremove=yes
+
+#    - name: Install additional packages
+#      package: name={{item}} state=latest
+#      with_items:
+#        - screen
+#        - git
+#        - rsync

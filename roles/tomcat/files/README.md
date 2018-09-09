@@ -1,1 +1,0 @@
-In this location the compressed tomcat distribution file is expected to be found. After copying the file here, update the defaults/main.yml accordingly to capture the file name. The jdbc jar is here as well (TODO: move it to the database role)

@@ -4,9 +4,7 @@
 Vagrant.configure("2") do |config|
 
   config.vm.box = "ubuntu/xenial64"
-
   config.vm.network "forwarded_port", guest: 5432, host: 5432 # Postgress
-
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
     vb.cpus = 1
@@ -28,12 +26,10 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    sleep 10
+    sleep 30
     psql -c "CREATE USER registry PASSWORD 'registry' createdb" --host=localhost --port=5432 --username=postgres
     psql -c "CREATE DATABASE registry OWNER = registry" --host=localhost --port=5432 --username=postgres
     pg_restore --host=localhost --port=5432 --username=registry -d registry /vagrant/registry_dump.tar
-    sudo cp /vagrant/crontab /var/spool/cron/crontabs/vagrant
-    sudo chown vagrant:crontab /var/spool/cron/crontabs/vagrant
   SHELL
 
 end

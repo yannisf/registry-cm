@@ -1,3 +1,6 @@
 *.gz
 *.tar
 *.jar
+*.log
+.vagrant
+registry_dump*

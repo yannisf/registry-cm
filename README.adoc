@@ -1,3 +1,0 @@
-== Registry: Configuration management
-
-Configuration management project to setup an environment to run the registry application. It is based on ansible, and sets up a RaspberryPI running Raspbian Jessie to host the http://github.com/yannisf/registry[registry] application.

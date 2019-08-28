@@ -1,0 +1,4 @@
+FROM postgres:10
+
+COPY init.sh /docker-entrypoint-initdb.d
+COPY dump.tar /docker-entrypoint-initdb.d

@@ -4,9 +4,12 @@
 Vagrant.configure("2") do |config|
 
   config.vm.box = "ubuntu/xenial64"
-  config.vm.network "forwarded_port", guest: 5432, host: 5432 # Postgress
+
+  config.vm.network "forwarded_port", guest: 5432, host: 5432
+  config.vm.network "forwarded_port", guest: 8080, host: 8888
+
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "1024"
+    vb.memory = "2048"
     vb.cpus = 1
   end
 
@@ -16,20 +19,10 @@ Vagrant.configure("2") do |config|
     curl -fsSL get.docker.com | sh
     usermod -aG docker vagrant
     systemctl restart docker
-    docker run --name postgres --restart unless-stopped -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:9.5
-    cp /vagrant/.pgpass ~vagrant
-    chown vagrant:vagrant ~vagrant/.pgpass
-    chmod 0600 ~vagrant/.pgpass
-    cp /vagrant/backup.sh ~vagrant
-    chown vagrant:vagrant ~vagrant/backup.sh
-    chmod u+x ~vagrant/backup.sh
-  SHELL
-
-  config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    sleep 30
-    psql -c "CREATE USER registry PASSWORD 'registry' createdb" --host=localhost --port=5432 --username=postgres
-    psql -c "CREATE DATABASE registry OWNER = registry" --host=localhost --port=5432 --username=postgres
-    pg_restore --host=localhost --port=5432 --username=registry -d registry /vagrant/registry_dump.tar
+    curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    cd /vagrant/compose
+    docker-compose up -d
   SHELL
 
 end

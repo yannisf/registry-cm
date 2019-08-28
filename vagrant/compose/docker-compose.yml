@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+  registrydb:
+    build:
+      context: .
+      dockerfile: Dockerfile-postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - common
+    restart: always
+    volumes:
+      - /vagrant/backup:/backup
+
+  registryserver:
+    build:
+      context: .
+      dockerfile: Dockerfile-tomcat
+    ports:
+      - "8080:8080"
+    depends_on:
+      - registrydb
+    restart: always
+    networks:
+      - common
+
+networks:
+  common:
+    driver: bridge

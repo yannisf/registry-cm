@@ -1,0 +1,11 @@
+FROM tomcat:9-jdk8
+
+# ENV POSTGRES_JDBC_VERSION 42.2.6
+# ENV POSTGRES_JDBC_URL https://repo1.maven.org/maven2/org/postgresql/postgresql/${POSTGRES_JDBC_VERSION}/postgresql-${POSTGRES_JDBC_VERSION}.jar
+ENV CATALINA_OPTS "-Dspring.profiles.active=dev -Dsecure=false"
+ENV WAR https://github.com/yannisf/registry/releases/download/20190821/registry.war
+# ENV WAR registry.war
+
+RUN rm -r $CATALINA_HOME/webapps/*
+# ADD $POSTGRES_JDBC_URL $CATALINA_HOME/lib
+ADD $WAR $CATALINA_HOME/webapps/ROOT.war

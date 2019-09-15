@@ -6,4 +6,4 @@ Postgres is initialized by restoring an existing dump, that should be available 
 
 Upon `vagrant up`, and after waiting for a while for the box to be downloaded and the virtual machine instantiated and provisioned, the application will start and should be available from the host machine through `http://localhost:8888`.
 
-A database backup can be taken at any time by logging into the vagrant container (`vagrant ssh`), and running `/vagrant/backup/backup.sh`. A dump of the database will be exported under that directory and should be avaialble from the host machine as well.
+A database backup can be taken at any time by logging into the vagrant container (`vagrant ssh`), and running `/vagrant/backup/backup.sh`. A dump of the database will be exported under that directory and should be available from the host machine as well. If `pg_dump` is locally available, a dump can easily be taken from the host by executing the `extbackup.sh` script.

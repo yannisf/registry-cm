@@ -6,6 +6,6 @@ ENV CATALINA_OPTS "-Dspring.profiles.active=dev -Dsecure=false"
 ENV WAR https://github.com/yannisf/registry/releases/download/20190821/registry.war
 # ENV WAR registry.war
 
-RUN rm -r $CATALINA_HOME/webapps/*
+RUN rm -r $CATALINA_HOME/webapps/* || true
 # ADD $POSTGRES_JDBC_URL $CATALINA_HOME/lib
 ADD $WAR $CATALINA_HOME/webapps/ROOT.war
